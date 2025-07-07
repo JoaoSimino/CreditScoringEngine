@@ -1,0 +1,55 @@
+# .github/workflows/ci-cd.yml
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test-release:
+    runs-on: self-hosted
+
+    env:
+      DOTNET_VERSION: '8.0.x'
+      ASPNETCORE_ENVIRONMENT: 'Test' 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # o ambiente DOTNET ja deve estar instalado na maquina host que estara rodando os jobs!
+      - name: Restore dependencies
+        run: dotnet restore MinimalAPIKickoff.sln
+
+      - name: Build solution
+        run: dotnet build MinimalAPIKickoff.sln --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test MinimalAPIKickoff.sln --configuration Release --no-build --verbosity normal
+
+      - name: Publish package
+        run: dotnet publish MinimalAPIKickoff.API/MinimalAPIKickoff.API.csproj --configuration Release --output ./publish
+
+      - name: Archive package
+        run: Compress-Archive -Path ./publish/* -DestinationPath ./MinimalAPIKickoff.zip
+        shell: powershell  
+
+      - name: Create Release Version Tag
+        id: tag
+        run: |
+          $version = "v1.0.$([int](Get-Date -UFormat %s))"
+          echo "RELEASE_TAG=$version" >> $env:GITHUB_ENV
+          echo "::set-output name=version::$version"
+        shell: powershell
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Release ${{ env.RELEASE_TAG }}
+          files: MinimalAPIKickoff.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
