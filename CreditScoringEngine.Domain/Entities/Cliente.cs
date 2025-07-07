@@ -9,5 +9,5 @@ public class Cliente
     public string HistoricoCreditoSimulado { get; set; }
 
     public PropostaCredito? PropostaCredito { get; set; }
-    public Guid PropostaCreditoId { get; set; }
+    //public Guid PropostaCreditoId { get; set; }
 }
