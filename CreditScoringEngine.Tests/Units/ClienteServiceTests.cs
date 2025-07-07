@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MinimalAPIKickoff.Tests.Units;
 
-public class UserServiceTests
+public class ClienteServiceTests
 {
     private readonly DbContextOptions<CreditScoringEngineContext> _options;
 
-    public UserServiceTests()
+    public ClienteServiceTests()
     {
         _options = new DbContextOptionsBuilder<CreditScoringEngineContext>()
             .UseInMemoryDatabase(databaseName: "TestDb")

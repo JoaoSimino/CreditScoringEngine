@@ -26,8 +26,6 @@
     <ProjectReference Include="..\CreditScoringEngine.Application\CreditScoringEngine.Application.csproj" />
     <ProjectReference Include="..\CreditScoringEngine.Domain\CreditScoringEngine.Domain.csproj" />
     <ProjectReference Include="..\CreditScoringEngine.Infrastructure\CreditScoringEngine.Infrastructure.csproj" />
-    <ProjectReference Include="..\MinimalAPIKickoff.Application\CreditScoringEngine.Application.csproj" />
-    <ProjectReference Include="..\MinimalAPIKickoff.Infrastructure\CreditScoringEngine.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
