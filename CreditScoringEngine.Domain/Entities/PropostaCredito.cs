@@ -9,6 +9,6 @@ public class PropostaCredito
     public ScoreInterno Score { get; set; }
     public string Justificativa { get; set; }
 
-    public Cliente Cliente { get; set; } //propriedade de navegacao
+    public Cliente Cliente { get; set; } = null!; //propriedade de navegacao, nuca pode ser nulo
     public Guid ClienteId { get; set; } //fk explicita
 }
