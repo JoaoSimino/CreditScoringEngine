@@ -4,6 +4,7 @@ using CreditScoringEngine.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreditScoringEngine.Infrastructure.Migrations
 {
     [DbContext(typeof(CreditScoringEngineContext))]
-    partial class CreditScoringEngineContextModelSnapshot : ModelSnapshot
+    [Migration("20250707164104_AdcionandoDemaisEntidadesERelacoes")]
+    partial class AdcionandoDemaisEntidadesERelacoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

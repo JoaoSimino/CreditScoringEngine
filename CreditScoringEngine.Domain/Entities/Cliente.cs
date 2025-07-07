@@ -7,4 +7,7 @@ public class Cliente
     public decimal RendaMensal { get; set; }
     public int Idade { get; set; }
     public string HistoricoCreditoSimulado { get; set; }
+
+    public PropostaCredito PropostaCredito { get; set; }
+    public Guid PropostaCreditoId { get; set; }
 }
