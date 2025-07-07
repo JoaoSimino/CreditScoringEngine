@@ -1,5 +1,5 @@
 
-# MinimalAPIKickoff
+# CreditScoringEngine
 
 [![Build Status](https://github.com/JoaoSimino/MinimalAPIKickoff/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/JoaoSimino/MinimalAPIKickoff/actions/workflows/ci-cd.yml)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
@@ -20,10 +20,8 @@
 
 ## Descrição
 
-MinimalAPIKickoff é um projeto de exemplo para demonstrar o uso de Minimal APIs com .NET 8 seguindo princípios de Clean Architecture.  
-Ele contém uma API para gerenciamento básico de usuários, implementando boas práticas como injeção de dependência, logging estruturado com Serilog, testes automatizados e pipeline CI/CD.
+CreditScoringEngine é um sistema que o objeto é resolver um problema real do domínio financeiro. Aplicando boas práticas de arquitetura em .NET e utilizando persistência com EF Core e SQL Server, testes automatizados, CI/CD (GitHub Actions) e eventualmente containerização com Docker
 
-Este projeto é ideal para quem deseja iniciar um template moderno para APIs .NET minimalistas, escaláveis e testáveis.
 
 ## Arquitetura e Tecnologias
 
