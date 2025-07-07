@@ -6,11 +6,11 @@ using System.Text.Json;
 
 namespace CreditScoringEngine.Tests.Integration;
 
-public class UserEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
+public class ClienteEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
 
-    public UserEndpointsTests(WebApplicationFactory<Program> factory)
+    public ClienteEndpointsTests(WebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
     }
