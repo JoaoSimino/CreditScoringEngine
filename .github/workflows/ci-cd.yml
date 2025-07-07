@@ -3,10 +3,11 @@
 name: CI/CD Pipeline
 
 on:
+  #alterando main para master apenas para desativar temporariamente meu CI, finalizando configracao do projeto devo voltar para main!!!
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build-test-release:

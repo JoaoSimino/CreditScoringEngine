@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CreditScoringEngine.Domain\CreditScoringEngine.Domain.csproj" />
+    <ProjectReference Include="..\CreditScoringEngine.Infrastructure\CreditScoringEngine.Infrastructure.csproj" />
+    <ProjectReference Include="..\CreditScoringEngine.Domain\CreditScoringEngine.Domain.csproj" />
+    <ProjectReference Include="..\CreditScoringEngine.Infrastructure\CreditScoringEngine.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
