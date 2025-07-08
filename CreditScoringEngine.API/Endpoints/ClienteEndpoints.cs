@@ -13,11 +13,11 @@ public static class ClienteEndpoints
 
         group.MapGet("/", async (IClienteService service) =>
         {
-            var listaDeClientes = await service.GetAllAsync();
+            var listaDeUsuarios = await service.GetAllAsync();
             
-            return listaDeClientes;
+            return listaDeUsuarios;
         })
-        .WithName("GetAllClientes")
+        .WithName("GetAllClients")
         .WithOpenApi();
 
         group.MapGet("/{id}", async (Guid id, IClienteService service) =>
@@ -27,7 +27,7 @@ public static class ClienteEndpoints
             Log.Information("Consulta ao cliente {cliente} foi efetuada no sistema!", cliente.Nome);
             return cliente;
         })
-        .WithName("GetUserById")
+        .WithName("GetClientById")
         .WithOpenApi();
 
         group.MapPost("/", async (ClienteDto clienteDto, IClienteService service) =>
@@ -38,7 +38,7 @@ public static class ClienteEndpoints
             Log.Information("Cliente {id}:{user} cadastrado com sucesso!", cliente.Id, cliente.Nome);
             return TypedResults.Created($"/api/User/{cliente.Id}", cliente);
         })
-        .WithName("CreateUser")
+        .WithName("CreateClient")
         .WithOpenApi();
 
         group.MapPut("/{id}",async (IClienteService service, Guid id, ClienteDto clienteDto) => {
@@ -48,12 +48,17 @@ public static class ClienteEndpoints
             await service.UpdateAsync(cliente!);
 
             return TypedResults.Ok<Cliente>(cliente!);
-        });
+        }).
+        WithName("UpdateClient")
+        .WithOpenApi();
+
         group.MapDelete("/{id}", async  (IClienteService service, Guid id) => {
             var cliente = await service.GetByIdAsync(id);
             await service.DeleteAsync(cliente!);
             return TypedResults.NoContent();
-        });
+        })
+        .WithName("DeleteClient")
+        .WithOpenApi();
 
     }
 }
