@@ -15,7 +15,7 @@ public class UserExceptionHandler : IExceptionHandler
         }
         ProblemDetails problemDetails = new ProblemDetails
         {
-            Title = "Houve um problema na criação do Usuario",
+            Title = "Houve um problema na criação do Cliente",
             Status = StatusCodes.Status400BadRequest,
             Detail = exception.Message
         };
@@ -23,7 +23,7 @@ public class UserExceptionHandler : IExceptionHandler
         httpContext.Response.StatusCode = problemDetails.Status.Value;
         await httpContext.Response.WriteAsJsonAsync(problemDetails);
 
-        Log.Error("Houve um problema na criação do Usuario!");
+        Log.Error($"Houve um problema na criação do Cliente!\n{exception.Message}");
         return true;
     }
 }
