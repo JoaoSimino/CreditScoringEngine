@@ -1,12 +1,11 @@
 ﻿using CreditScoringEngine.Application.Services;
+using CreditScoringEngine.Domain.DTOs;
 using CreditScoringEngine.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
 using Serilog;
 
 namespace CreditScoringEngine.API.Endpoints;
 
-public static class UserEndpoints
+public static class ClienteEndpoints
 {
     public static void MapUserEndpoints(this IEndpointRouteBuilder routes) 
     {
@@ -31,9 +30,9 @@ public static class UserEndpoints
         .WithName("GetUserById")
         .WithOpenApi();
 
-        group.MapPost("/", async (Cliente cliente, IClienteService service) =>
+        group.MapPost("/", async (ClienteDto clienteDto, IClienteService service) =>
         {
-            
+            var cliente = new Cliente().DtoToEntity(clienteDto);
             await service.AddAsync(cliente);
 
             Log.Information("Cliente {id}:{user} cadastrado com sucesso!", cliente.Id, cliente.Nome);
@@ -41,6 +40,20 @@ public static class UserEndpoints
         })
         .WithName("CreateUser")
         .WithOpenApi();
+
+        group.MapPut("/{id}",async (IClienteService service, Guid id, ClienteDto clienteDto) => {
+            
+            var cliente = await service.GetByIdAsync(id);
+            cliente!.Update(clienteDto);
+            await service.UpdateAsync(cliente!);
+
+            return TypedResults.Ok<Cliente>(cliente!);
+        });
+        group.MapDelete("/{id}", async  (IClienteService service, Guid id) => {
+            var cliente = await service.GetByIdAsync(id);
+            await service.DeleteAsync(cliente!);
+            return TypedResults.NoContent();
+        });
 
     }
 }
