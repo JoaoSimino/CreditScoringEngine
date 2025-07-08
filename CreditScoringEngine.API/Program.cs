@@ -79,7 +79,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
 
-app.MapUserEndpoints();
+app.MapClienteEndpoints();
 
 app.Run();
 
