@@ -44,10 +44,11 @@ public class ClienteServiceTests
         // Arrange
         using var context = new CreditScoringEngineContext(_options);
         context.Clientes.Add(new Cliente {
-            Nome = "Cliente Test",
-            Idade = 40,
-            RendaMensal = 10000,
-            HistoricoCreditoSimulado = ""
+            Id = Guid.NewGuid(),
+            Nome = "João Victor",
+            RendaMensal = 8500,
+            Idade = 32,
+            HistoricoCreditoSimulado = "Sem inadimplência nos últimos 12 meses"
         });
         context.SaveChanges();
 
