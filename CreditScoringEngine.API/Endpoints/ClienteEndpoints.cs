@@ -7,15 +7,15 @@ namespace CreditScoringEngine.API.Endpoints;
 
 public static class ClienteEndpoints
 {
-    public static void MapUserEndpoints(this IEndpointRouteBuilder routes) 
+    public static void MapClienteEndpoints(this IEndpointRouteBuilder routes) 
     {
         var group = routes.MapGroup("/api/Cliente").WithTags(nameof(Cliente));
 
         group.MapGet("/", async (IClienteService service) =>
         {
-            var listaDeUsuarios = await service.GetAllAsync();
+            var listaDeClientes = await service.GetAllAsync();
             
-            return listaDeUsuarios;
+            return listaDeClientes;
         })
         .WithName("GetAllClientes")
         .WithOpenApi();
