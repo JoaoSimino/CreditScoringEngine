@@ -16,4 +16,15 @@ public static class PropostaExtensions
 
         return proposta;
     }
+    public static PropostaCredito Update(this PropostaCredito proposta, PropostaDto propostadto, Cliente cliente)
+    {
+        proposta.ValorSolicitado = propostadto.ValorSolicitado;
+        proposta.DataProposta = DateTime.Now;
+        proposta.Status = StatusProposta.Pendente;
+        proposta.Score = null;
+        proposta.Justificativa = "em analise....";
+        proposta.Cliente = cliente;
+
+        return proposta;
+    }
 }

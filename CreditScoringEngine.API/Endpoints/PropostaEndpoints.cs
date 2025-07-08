@@ -44,6 +44,28 @@ public static class PropostaEndpoints
         .WithName("CreateProposal")
         .WithOpenApi();
 
+        group.MapPut("/{id}", async (IPropostaService service, IClienteService clientService, Guid proposalId, PropostaDto propostaDto) => {
+
+            var proposta = await service.GetByIdAsync(proposalId);//ver inicialmente se a proposta existe na base
+            var cliente = await clientService.GetByIdAsync(propostaDto.ClienteId);//se a proposta existir e eu nao mudar o cliente ja foi validado se ele existe! sendo possivel trocar o cliente preciso verificar se o novo esta na base
+            
+            proposta!.Update(propostaDto,cliente);
+            await service.UpdateAsync(proposta!);
+
+            return TypedResults.Ok<PropostaCredito>(proposta!);
+        }).
+        WithName("UpdateProposal")
+        .WithOpenApi();
+
+        group.MapDelete("/{id}", async (IPropostaService service, Guid id) => {
+            
+            var proposta = await service.GetByIdAsync(id);
+            await service.DeleteAsync(proposta!);
+            return TypedResults.NoContent();
+        })
+        .WithName("DeleteProposal")
+        .WithOpenApi();
+
 
     }
 }
