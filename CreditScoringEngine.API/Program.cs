@@ -61,6 +61,7 @@ else
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ClienteExceptionHandler>();
+builder.Services.AddExceptionHandler<ClienteNotFoundExceptionHandler>();
 
 
 

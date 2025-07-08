@@ -42,7 +42,7 @@ public class ClienteService : CrudService<Cliente>, IClienteService
 
         if (cliente is null)
         {
-            throw new ClienteExceptions("Cliente invalido, nao encontrado na base!");
+            throw new ClienteNotFoundException("Cliente invalido, nao encontrado na base!");
         }
         return cliente;
     }
