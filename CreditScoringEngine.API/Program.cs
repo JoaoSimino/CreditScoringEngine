@@ -60,7 +60,7 @@ else
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddProblemDetails();
-builder.Services.AddExceptionHandler<UserExceptionHandler>();
+builder.Services.AddExceptionHandler<ClienteExceptionHandler>();
 
 
 

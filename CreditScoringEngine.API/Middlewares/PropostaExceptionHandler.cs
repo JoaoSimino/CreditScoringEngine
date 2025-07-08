@@ -5,17 +5,17 @@ using Serilog;
 
 namespace CreditScoringEngine.API.Middlewares;
 
-public class UserExceptionHandler : IExceptionHandler
+public class PropostaExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        if (exception is not ClienteExceptions)
+        if (exception is not PropostaExceptions)
         {
             return false;
         }
         ProblemDetails problemDetails = new ProblemDetails
         {
-            Title = "Houve um problema na criação do Cliente",
+            Title = "Houve um problema na criação da Proposta!",
             Status = StatusCodes.Status400BadRequest,
             Detail = exception.Message
         };
@@ -23,7 +23,7 @@ public class UserExceptionHandler : IExceptionHandler
         httpContext.Response.StatusCode = problemDetails.Status.Value;
         await httpContext.Response.WriteAsJsonAsync(problemDetails);
 
-        Log.Error($"Houve um problema na criação do Cliente!\n{exception.Message}");
+        Log.Error($"Houve um problema na criação da Proposta!\n{exception.Message}");
         return true;
     }
 }
