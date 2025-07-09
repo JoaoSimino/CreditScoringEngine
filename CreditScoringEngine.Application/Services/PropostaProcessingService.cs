@@ -22,9 +22,61 @@ public class PropostaProcessingService : IPropostaProcessingService
 
         foreach (var proposta in propostas)
         {
-            //aqui entra a logica de negocio que sera desenvolvida para tratamento de cada proposta!
-            proposta.Justificativa = "Aprovado automaticamente";
-            proposta.Status = StatusProposta.Aprovada;
+            var cliente = proposta.Cliente;
+
+            int score = 0;
+
+            if (cliente.RendaMensal >= 10000) score += 40;
+            else if (cliente.RendaMensal >= 5000) score += 25;
+            else score += 10;
+
+
+            if (cliente.Idade >= 30 && cliente.Idade <= 50) score += 30;
+            else if (cliente.Idade >= 21) score += 20;
+            else score += 10;
+
+            if (cliente.HistoricoCreditoSimulado.Contains("sem inadimplência", StringComparison.OrdinalIgnoreCase))
+                score += 30;
+            else if (cliente.HistoricoCreditoSimulado.Contains("inadimplente", StringComparison.OrdinalIgnoreCase))
+                score -= 20;
+
+            FaixaRisco faixa = score switch
+            {
+                >= 80 => FaixaRisco.Baixo,
+                >= 50 => FaixaRisco.Medio,
+                _ => FaixaRisco.Alto
+            };
+
+            StatusProposta status;
+            string justificativa;
+
+            switch (faixa)
+            {
+                case FaixaRisco.Baixo:
+                    status = StatusProposta.Aprovada;
+                    justificativa = "Score elevado e baixo risco.";
+                    break;
+
+                case FaixaRisco.Medio:
+                    status = StatusProposta.Aprovada;
+                    justificativa = "Risco moderado. Proposta aprovada com ressalvas.";
+                    break;
+
+                default:
+                    status = StatusProposta.Recusada;
+                    justificativa = "Alto risco de inadimplência.";
+                    break;
+            }
+
+            proposta.Status = status;
+            proposta.Justificativa = justificativa;
+
+            proposta.Score = new ScoreInterno
+            {
+                Valor = score,
+                Faixa = faixa
+            };
+
 
             await _propostaService.UpdateAsync(proposta);
         }
