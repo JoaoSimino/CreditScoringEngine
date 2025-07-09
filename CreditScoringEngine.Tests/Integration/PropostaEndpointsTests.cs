@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text;
 using System.Net;
 using CreditScoringEngine.Domain.DTOs;
+using System.Text.Json.Serialization;
 
 namespace CreditScoringEngine.Tests.Integration;
 
@@ -83,7 +84,8 @@ public class PropostaEndpointsTests : IClassFixture<WebApplicationFactory<Progra
             await post.Content.ReadAsStringAsync(),
             new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() }
             });
 
 
