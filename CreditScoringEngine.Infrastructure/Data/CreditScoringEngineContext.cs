@@ -18,7 +18,8 @@ public class CreditScoringEngineContext : DbContext
         modelBuilder.Entity<PropostaCredito>()
             .HasOne(pc => pc.Cliente)
             .WithOne(c => c.PropostaCredito)
-            .HasForeignKey<PropostaCredito>(pc => pc.ClienteId);
+            .HasForeignKey<PropostaCredito>(pc => pc.ClienteId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<PropostaCredito>()
             .Property(pc => pc.Status)
