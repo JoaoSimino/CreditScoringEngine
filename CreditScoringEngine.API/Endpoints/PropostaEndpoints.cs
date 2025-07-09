@@ -62,14 +62,7 @@ public static class PropostaEndpoints
             await service.AddAsync(proposta);
 
             Log.Information("Proposta {id}:{clienteId} cadastrada com sucesso!", cliente!.Id, proposta.Id);
-            return TypedResults.Created($"/api/Proposta/{proposta.Id}", new
-            {
-                PropostaId = proposta.Id,
-                ValorSolicitado = proposta.ValorSolicitado,
-                DataDeCriacao = proposta.DataProposta,
-                Status = proposta.Status,
-                ClienteId = proposta.ClienteId
-            });
+            return TypedResults.Created($"/api/Proposta/{proposta.Id}", new PropostaResponseDto(proposta.Id,proposta.ValorSolicitado,DateTime.Now,StatusProposta.Pendente,proposta.ClienteId));
         })
         .WithName("CreateProposal")
         .WithOpenApi();
