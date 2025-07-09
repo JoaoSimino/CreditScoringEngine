@@ -114,4 +114,75 @@ public class PropostaProcessingServiceTests
         Assert.Equal(FaixaRisco.Alto, proposta.Score.Faixa);
         Assert.Equal("Alto risco de inadimplência.", proposta.Justificativa);
     }
+
+    [Fact]
+    public async Task Proposta_Com_ValorMaior_Que_20xRenda_Deve_Ser_Recusada()
+    {
+        var proposta = new PropostaCredito
+        {
+            Id = Guid.NewGuid(),
+            ValorSolicitado = 210000, // Renda * 21
+            Cliente = new Cliente
+            {
+                Nome = "Pedro",
+                RendaMensal = 1000,
+                Idade = 70,
+                HistoricoCreditoSimulado = "sem inadimplência"
+            },
+            Status = StatusProposta.Pendente,
+            Score = new ScoreInterno()
+        };
+
+        var propostas = new List<PropostaCredito> { proposta };
+
+        var mockService = new Mock<IPropostaService>();
+        mockService.Setup(s => s.GetPropostaByStatusAsync(StatusProposta.Pendente))
+                   .ReturnsAsync(propostas);
+        mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
+                   .Returns(Task.CompletedTask);
+
+        var processor = new PropostaProcessingService(mockService.Object);
+
+        await processor.ProcessarPropostasPendentesAsync();
+
+        Assert.Equal(StatusProposta.Recusada, proposta.Status);
+        Assert.Equal(FaixaRisco.Alto, proposta.Score.Faixa);
+        Assert.True(proposta.Score.Valor < 50);
+    }
+
+    [Fact]
+    public async Task Proposta_Com_ValorDentroDoLimite_Nao_Deve_Ser_Penalizada()
+    {
+        var proposta = new PropostaCredito
+        {
+            Id = Guid.NewGuid(),
+            ValorSolicitado = 180000, // Renda * 18
+            Cliente = new Cliente
+            {
+                Nome = "Fernanda",
+                RendaMensal = 10000,
+                Idade = 35,
+                HistoricoCreditoSimulado = "sem inadimplência"
+            },
+            Status = StatusProposta.Pendente,
+            Score = new ScoreInterno()
+        };
+
+        var propostas = new List<PropostaCredito> { proposta };
+
+        var mockService = new Mock<IPropostaService>();
+        mockService.Setup(s => s.GetPropostaByStatusAsync(StatusProposta.Pendente))
+                   .ReturnsAsync(propostas);
+        mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
+                   .Returns(Task.CompletedTask);
+
+        var processor = new PropostaProcessingService(mockService.Object);
+
+        await processor.ProcessarPropostasPendentesAsync();
+
+        Assert.Equal(StatusProposta.Aprovada, proposta.Status);
+        Assert.True(proposta.Score.Valor >= 80);
+        Assert.Equal(FaixaRisco.Baixo, proposta.Score.Faixa);
+    }
+
 }
