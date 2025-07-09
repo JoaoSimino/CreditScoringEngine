@@ -80,4 +80,12 @@ public class PropostaService : CrudService<PropostaCredito>, IPropostaService
 
 
     }
+
+    public async Task<IEnumerable<PropostaCredito>> GetPropostaByStatusAsync(StatusProposta status)
+    {
+        IEnumerable<PropostaCredito>? propostas = await _context.Set<PropostaCredito>()
+            .Where(pc => pc.Status == status)
+            .ToListAsync();
+        return propostas;   
+    }
 }
