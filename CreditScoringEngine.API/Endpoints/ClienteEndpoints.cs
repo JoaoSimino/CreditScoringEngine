@@ -13,9 +13,17 @@ public static class ClienteEndpoints
 
         group.MapGet("/", async (IClienteService service) =>
         {
-            var listaDeUsuarios = await service.GetAllAsync();
+            var clientes = await service.GetAllAsync();
             
-            return listaDeUsuarios;
+
+            return clientes.Select(c=> new
+            {
+                c.Id,
+                c.Nome,
+                c.RendaMensal,
+                c.Idade,
+                c.HistoricoCreditoSimulado
+            });
         })
         .WithName("GetAllClients")
         .WithOpenApi();
@@ -25,7 +33,16 @@ public static class ClienteEndpoints
             var cliente = await service.GetByIdAsync(id);
 
             Log.Information("Consulta ao cliente {cliente} foi efetuada no sistema!", cliente.Nome);
-            return cliente;
+            var resultado = new
+            {
+                cliente.Id,
+                cliente.Nome,
+                cliente.RendaMensal,
+                cliente.Idade,
+                cliente.HistoricoCreditoSimulado
+            };
+            
+            return resultado;
         })
         .WithName("GetClientById")
         .WithOpenApi();

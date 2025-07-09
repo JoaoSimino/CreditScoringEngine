@@ -4,4 +4,5 @@ namespace CreditScoringEngine.Application.Services;
 
 public interface IPropostaService : ICrudService<PropostaCredito>
 {
+    public Task GetPropostaByClientIdAsync(Guid clientId);
 }

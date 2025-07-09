@@ -1,12 +1,13 @@
 ﻿using CreditScoringEngine.Application.Exceptions;
 using CreditScoringEngine.Domain.Entities;
+using CreditScoringEngine.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreditScoringEngine.Application.Services;
 
 public class PropostaService : CrudService<PropostaCredito>, IPropostaService
 {
-    public PropostaService(DbContext context) : base(context)
+    public PropostaService(CreditScoringEngineContext context) : base(context)
     {
     }
 
@@ -34,7 +35,7 @@ public class PropostaService : CrudService<PropostaCredito>, IPropostaService
 
         if (proposta is null)
         {
-            throw new PropostaExceptions("Proposta invalida, nao encontrado na base!");
+            throw new PropostaNotFoundExceptions("Proposta invalida, nao encontrado na base!");
         }
         return proposta;
     }
@@ -66,5 +67,17 @@ public class PropostaService : CrudService<PropostaCredito>, IPropostaService
         }
     }
 
+    public async Task GetPropostaByClientIdAsync(Guid clientId)
+    {
+        var proposta = await _context.Set<PropostaCredito>()
+            .Where(p => p.ClienteId == clientId)
+            .FirstOrDefaultAsync();
 
+        if (proposta is not null) 
+        {
+            throw new PropostaExceptions($"O Cliente em questao ja esta sendo utilizado em outra Proposta!");
+        }
+
+
+    }
 }

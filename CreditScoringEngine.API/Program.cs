@@ -59,9 +59,12 @@ else
 }
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IPropostaService, PropostaService>();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ClienteExceptionHandler>();
 builder.Services.AddExceptionHandler<ClienteNotFoundExceptionHandler>();
+builder.Services.AddExceptionHandler<PropostaExceptionHandler>();
+    builder.Services.AddExceptionHandler<PropostaNotFoundExceptionsHandler>();
 
 
 
@@ -80,6 +83,7 @@ app.UseHttpsRedirection();
 app.UseExceptionHandler();
 
 app.MapClienteEndpoints();
+app.MapPropostaEndpoints();
 
 app.Run();
 

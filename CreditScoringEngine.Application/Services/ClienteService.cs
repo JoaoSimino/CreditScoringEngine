@@ -38,12 +38,15 @@ public class ClienteService : CrudService<Cliente>, IClienteService
 
     public override async Task<Cliente?> GetByIdAsync(object id)
     {
-        var cliente = await _context.Set<Cliente>().FindAsync(id);
+        var cliente = await _context.Set<Cliente>()
+            .FindAsync(id);
 
         if (cliente is null)
         {
             throw new ClienteNotFoundException("Cliente invalido, nao encontrado na base!");
         }
+
+
         return cliente;
     }
 
