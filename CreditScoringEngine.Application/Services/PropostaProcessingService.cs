@@ -40,6 +40,10 @@ public class PropostaProcessingService : IPropostaProcessingService
             else if (cliente.HistoricoCreditoSimulado.Contains("inadimplente", StringComparison.OrdinalIgnoreCase))
                 score -= 20;
 
+            if (proposta.ValorSolicitado >= cliente.RendaMensal * 20)
+                score -= 15;
+
+
             FaixaRisco faixa = score switch
             {
                 >= 80 => FaixaRisco.Baixo,
