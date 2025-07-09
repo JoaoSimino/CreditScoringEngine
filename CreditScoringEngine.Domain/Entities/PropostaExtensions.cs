@@ -10,7 +10,11 @@ public static class PropostaExtensions
         proposta.ValorSolicitado = propostadto.ValorSolicitado;
         proposta.DataProposta = DateTime.Now;
         proposta.Status = StatusProposta.Pendente;
-        proposta.Score = null;
+        proposta.Score = new ScoreInterno
+        {
+            Faixa = FaixaRisco.Baixo,
+            Valor = 0
+        };
         proposta.Justificativa = "em analise....";
         proposta.Cliente = cliente;
 
@@ -21,7 +25,11 @@ public static class PropostaExtensions
         proposta.ValorSolicitado = propostadto.ValorSolicitado;
         proposta.DataProposta = DateTime.Now;
         proposta.Status = StatusProposta.Pendente;
-        proposta.Score = null;
+        proposta.Score = new ScoreInterno
+        {
+            Faixa = FaixaRisco.Baixo,
+            Valor = 0
+        };
         proposta.Justificativa = "em analise....";
         proposta.Cliente = cliente;
 

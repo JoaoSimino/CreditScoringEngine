@@ -15,7 +15,15 @@ public static class PropostaEndpoints
         {
             var listaDePropostas = await service.GetAllAsync();
 
-            return listaDePropostas;
+            return listaDePropostas.Select(p => new{
+                p.Id,
+                p.ValorSolicitado,
+                p.DataProposta,
+                p.Status,
+                p.Score,
+                p.Justificativa,
+                p.ClienteId
+            });
         })
         .WithName("GetAllProposals")
         .WithOpenApi();
@@ -25,7 +33,19 @@ public static class PropostaEndpoints
             var proposta = await service.GetByIdAsync(id);
 
             Log.Information("Consulta a Proposta {proposta} foi efetuada no sistema!", proposta.Id);
-            return proposta;
+
+            var resultado = new
+            {
+                proposta.Id,
+                proposta.ValorSolicitado,
+                proposta.DataProposta,
+                proposta.Status,
+                proposta.Score,
+                proposta.Justificativa,
+                proposta.ClienteId
+            };
+            
+            return resultado;
         })
         .WithName("GetProposalById")
         .WithOpenApi();
@@ -34,12 +54,22 @@ public static class PropostaEndpoints
         {
             var cliente = await clientService.GetByIdAsync(propostaDto.ClienteId);//verificando inicialmente se o cliente eh valido, se nao a funcao ja lanca excessao
 
+            //verificar se o ID do cliente ja esta associado a alguma proposta, bucasndo na tabela
+            await service.GetPropostaByClientIdAsync(cliente!.Id);
+
             var proposta = new PropostaCredito().DtoToEntity(propostaDto, cliente!);
 
             await service.AddAsync(proposta);
 
             Log.Information("Proposta {id}:{clienteId} cadastrada com sucesso!", cliente!.Id, proposta.Id);
-            return TypedResults.Created($"/api/Proposta/{proposta.Id}", proposta);
+            return TypedResults.Created($"/api/Proposta/{proposta.Id}", new
+            {
+                PropostaId = proposta.Id,
+                ValorSolicitado = proposta.ValorSolicitado,
+                DataDeCriacao = proposta.DataProposta,
+                Status = proposta.Status,
+                ClienteId = proposta.ClienteId
+            });
         })
         .WithName("CreateProposal")
         .WithOpenApi();
