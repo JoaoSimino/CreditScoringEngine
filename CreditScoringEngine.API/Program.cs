@@ -9,6 +9,7 @@ using Serilog.Sinks.MSSqlServer;
 using System.Text.Json.Serialization;
 using Hangfire;
 using Hangfire.MemoryStorage;
+using CreditScoringEngine.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +85,8 @@ builder.Services.AddHangfire(config =>
     config.UseMemoryStorage();
 });
 builder.Services.AddHangfireServer();
+
+builder.Services.AddSingleton<IMessagePublisher, RabbitMQPublisher>();
 
 var app = builder.Build();
 
