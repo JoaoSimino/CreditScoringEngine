@@ -1,21 +1,27 @@
 ﻿
 using CreditScoringEngine.Domain.Entities;
+using CreditScoringEngine.Infrastructure.Messaging;
+using Microsoft.Extensions.Logging;
 
 namespace CreditScoringEngine.Application.Services;
 
 public class PropostaProcessingService : IPropostaProcessingService
 {
     private readonly IPropostaService _propostaService;
+    private readonly IMessagePublisher _messagePublisher;
+    private readonly ILogger<PropostaProcessingService> _logger;
 
-    public PropostaProcessingService(IPropostaService propostaService)
+    public PropostaProcessingService(IPropostaService propostaService, IMessagePublisher messagePublisher, ILogger<PropostaProcessingService> logger)
     {
         _propostaService = propostaService;
+        _messagePublisher = messagePublisher;
+        _logger = logger;
     }
     public async Task ProcessarPropostasPendentesAsync()
     {
         var propostas = await _propostaService.GetPropostaByStatusAsync(StatusProposta.Pendente);
 
-        if (propostas.Count() == 0) 
+        if (propostas.Count() == 0)
         {
             Console.WriteLine("Sem propostas para tratar no momento!");
         }
@@ -83,6 +89,20 @@ public class PropostaProcessingService : IPropostaProcessingService
 
 
             await _propostaService.UpdateAsync(proposta);
+
+            //caso a proposta foi salva com sucesso verifico, se foi aprovada e envio para a fila do RabbitMQ!
+            if (proposta.Status == StatusProposta.Aprovada)
+            {
+                var evento = new PropostaAprovadaEvent
+                {
+                    PropostaId = proposta.Id.ToString(),
+                    ClienteId = proposta.Id.ToString(),
+                    ValorAprovado = proposta.ValorSolicitado
+                };
+                await _messagePublisher.PublicarAsync(evento, "propostas-aprovadas");
+                _logger.LogInformation("Proposta {PropostaId} aprovada publicada com sucesso no RabbitMQ.", proposta.Id);
+            };
+
         }
 
     }
