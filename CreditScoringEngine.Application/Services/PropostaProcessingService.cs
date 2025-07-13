@@ -17,6 +17,11 @@ public class PropostaProcessingService : IPropostaProcessingService
         _messagePublisher = messagePublisher;
         _logger = logger;
     }
+    public PropostaProcessingService(IPropostaService propostaService)
+    {
+        _propostaService = propostaService;
+    }
+
     public async Task ProcessarPropostasPendentesAsync()
     {
         var propostas = await _propostaService.GetPropostaByStatusAsync(StatusProposta.Pendente);
