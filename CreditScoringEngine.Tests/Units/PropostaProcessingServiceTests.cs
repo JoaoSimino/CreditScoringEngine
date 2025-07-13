@@ -1,5 +1,7 @@
 ﻿using CreditScoringEngine.Application.Services;
 using CreditScoringEngine.Domain.Entities;
+using CreditScoringEngine.Infrastructure.Messaging;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace CreditScoringEngine.Tests.Units;
@@ -33,7 +35,13 @@ public class PropostaProcessingServiceTests
         mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
                    .Returns(Task.CompletedTask);
 
-        var processor = new PropostaProcessingService(mockService.Object);
+        var mockMessagePublisher = new Mock<IMessagePublisher>();
+        var mockLogger = new Mock<ILogger<PropostaProcessingService>>();
+
+        var processor = new PropostaProcessingService(
+            mockService.Object,
+            mockMessagePublisher.Object,
+            mockLogger.Object);
 
         // Act
         await processor.ProcessarPropostasPendentesAsync();
@@ -71,7 +79,13 @@ public class PropostaProcessingServiceTests
         mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
                    .Returns(Task.CompletedTask);
 
-        var processor = new PropostaProcessingService(mockService.Object);
+        var mockMessagePublisher = new Mock<IMessagePublisher>();
+        var mockLogger = new Mock<ILogger<PropostaProcessingService>>();
+
+        var processor = new PropostaProcessingService(
+            mockService.Object,
+            mockMessagePublisher.Object,
+            mockLogger.Object);
 
         await processor.ProcessarPropostasPendentesAsync();
 
@@ -106,7 +120,13 @@ public class PropostaProcessingServiceTests
         mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
                    .Returns(Task.CompletedTask);
 
-        var processor = new PropostaProcessingService(mockService.Object);
+        var mockMessagePublisher = new Mock<IMessagePublisher>();
+        var mockLogger = new Mock<ILogger<PropostaProcessingService>>();
+
+        var processor = new PropostaProcessingService(
+            mockService.Object,
+            mockMessagePublisher.Object,
+            mockLogger.Object);
 
         await processor.ProcessarPropostasPendentesAsync();
 
@@ -141,7 +161,13 @@ public class PropostaProcessingServiceTests
         mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
                    .Returns(Task.CompletedTask);
 
-        var processor = new PropostaProcessingService(mockService.Object);
+        var mockMessagePublisher = new Mock<IMessagePublisher>();
+        var mockLogger = new Mock<ILogger<PropostaProcessingService>>();
+
+        var processor = new PropostaProcessingService(
+            mockService.Object,
+            mockMessagePublisher.Object,
+            mockLogger.Object);
 
         await processor.ProcessarPropostasPendentesAsync();
 
@@ -176,7 +202,13 @@ public class PropostaProcessingServiceTests
         mockService.Setup(s => s.UpdateAsync(It.IsAny<PropostaCredito>()))
                    .Returns(Task.CompletedTask);
 
-        var processor = new PropostaProcessingService(mockService.Object);
+        var mockMessagePublisher = new Mock<IMessagePublisher>();
+        var mockLogger = new Mock<ILogger<PropostaProcessingService>>();
+
+        var processor = new PropostaProcessingService(
+            mockService.Object,
+            mockMessagePublisher.Object,
+            mockLogger.Object);
 
         await processor.ProcessarPropostasPendentesAsync();
 
