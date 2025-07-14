@@ -97,7 +97,7 @@ public class PropostaProcessingService : IPropostaProcessingService
                 var evento = new PropostaAprovadaEvent
                 {
                     PropostaId = proposta.Id.ToString(),
-                    ClienteId = proposta.Id.ToString(),
+                    ClienteId = proposta.ClienteId.ToString(),
                     ValorAprovado = proposta.ValorSolicitado
                 };
                 await _messagePublisher.PublicarAsync(evento, "propostas-aprovadas");
