@@ -71,7 +71,15 @@ builder.Services.AddExceptionHandler<ClienteNotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<PropostaExceptionHandler>();
 builder.Services.AddExceptionHandler<PropostaNotFoundExceptionsHandler>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermissiveCors", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -97,6 +105,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("PermissiveCors");
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
