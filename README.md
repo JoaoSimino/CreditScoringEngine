@@ -1,9 +1,8 @@
 
 # CreditScoringEngine
 
-[![Build Status](https://github.com/JoaoSimino/MinimalAPIKickoff/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/JoaoSimino/MinimalAPIKickoff/actions/workflows/ci-cd.yml)
+[![Build Status](https://github.com/JoaoSimino/CreditScoringEngine/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/JoaoSimino/CreditScoringEngine/actions/workflows/ci-cd.yml)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
-[![Coverage](https://img.shields.io/badge/coverage-unknown-lightgrey.svg)]()
 
 ## Sumário
 
@@ -20,11 +19,12 @@
 
 ## Descrição
 
-CreditScoringEngine é um sistema que o objeto é resolver um problema real do domínio financeiro. Aplicando boas práticas de arquitetura em .NET e utilizando persistência com EF Core e SQL Server, testes automatizados, CI/CD (GitHub Actions) e eventualmente containerização com Docker
-
+O CreditScoringEngine é um microserviço responsável por processar propostas de crédito enviadas por clientes cadastrados.
+Ao receber uma solicitação, o sistema realiza um cruzamento inteligente dos dados do cliente e do valor solicitado para calcular um Score Interno e gerar uma justificativa para a aprovação ou reprovação da proposta de crédito.
+As propostas aprovadas são automaticamente encaminhadas para um sistema de billing via integração com RabbitMQ, garantindo comunicação assíncrona, segura e escalável entre os serviços.
 
 ## Arquitetura e Tecnologias
-
+Este projeto aplica boas práticas de arquitetura limpa no .NET 8, com foco em testes automatizados, logging estruturado, containerização e CI/CD, proporcionando robustez e qualidade para ambientes financeiros.
 - .NET 8 Minimal APIs
 - Clean Architecture com separação em camadas:
   - **Domain**: entidades e regras de negócio
@@ -38,32 +38,34 @@ CreditScoringEngine é um sistema que o objeto é resolver um problema real do d
 
 ## Funcionalidades
 
-- CRUD básico para usuários via endpoints RESTful
-- Tratamento global de erros via middleware personalizado
-- Logging estruturado e enriquecido
-- Testes unitários e integração para garantir estabilidade
+- Gerenciamento completo de Clientes: cadastro, consulta, atualização e exclusão (CRUD) via endpoints RESTful
+- Gerenciamento de Propostas de Crédito: criação, consulta, atualização e exclusão, com cálculo automático do Score Interno e justificativa
+- Processamento automático das propostas aprovadas e integração com sistema de billing via RabbitMQ
+- Tratamento global e consistente de erros com middleware personalizado
+- Logging estruturado e enriquecido para facilitar auditoria e monitoramento
+- Cobertura de testes unitários e de integração para garantir estabilidade e qualidade do sistema
 
 ## Pré-requisitos
 
-- .NET SDK 8.0 instalado ([Download](https://dotnet.microsoft.com/en-us/download/dotnet/8.0))
-- SQL Server local (opcional para logs)
+- .NET SDK 8.0 instalado (Download)
+- SQL Server local ou via container Docker (exemplo da imagem oficial: mcr.microsoft.com/mssql/server:2022-latest)
 - Visual Studio 2022 ou VS Code recomendado
-- Docker (opcional para ambiente isolado)
+- Docker instalado (opcional, para rodar container isolado do SQL Server ou da aplicação)
 
 ## Como rodar
 
 Clone o repositório:
 
 ```bash
-git clone https://github.com/JoaoSimino/MinimalAPIKickoff.git
-cd MinimalAPIKickoff
+git clone https://github.com/JoaoSimino/CreditScoringEngine.git
+cd CreditScoringEngine
 ```
 
 Restaurar dependências e rodar a aplicação:
 
 ```bash
-dotnet restore MinimalAPIKickoff.sln
-dotnet run --project MinimalAPIKickoff.API
+dotnet restore CreditScoringEngine.sln
+dotnet run --project CreditScoringEngine.API
 ```
 
 A API estará disponível em `http://localhost:5000` (ou porta configurada).
@@ -73,7 +75,7 @@ A API estará disponível em `http://localhost:5000` (ou porta configurada).
 Para rodar todos os testes:
 
 ```bash
-dotnet test MinimalAPIKickoff.sln --configuration Release --verbosity normal
+dotnet test CreditScoringEngine.sln --configuration Release --verbosity normal
 ```
 
 Os testes utilizam banco InMemory para isolamento total.
@@ -83,10 +85,10 @@ Os testes utilizam banco InMemory para isolamento total.
 A API está configurada com Swagger UI para facilitar testes e visualização da documentação.  
 Acesse `http://localhost:5000/swagger` após rodar a aplicação.
 
-Exemplo de requisição curl para listar usuários:
+Exemplo de requisição curl para listar Clientes:
 
 ```bash
-curl -X GET http://localhost:5000/api/User
+curl -X GET http://localhost:5000/api/Cliente
 ```
 
 ## Contribuindo
@@ -106,7 +108,7 @@ O projeto utiliza GitHub Actions para:
 
 - Validar o código a cada push/PR na branch `main`
 - Executar testes automaticamente
-- Buildar e preparar o pacote para release
+- Buildar e preparar o pacote para release, e subir ja um container atualizar para o Docker hub. 
 
 O workflow está disponível em `.github/workflows/ci-cd.yml`.
 
@@ -116,5 +118,5 @@ Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICEN
 
 ---
 
-Obrigado por usar o MinimalAPIKickoff!  
+Obrigado por usar o CreditScoringEngine!  
 Para dúvidas ou sugestões, abra uma issue ou entre em contato comigo.
