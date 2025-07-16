@@ -5,9 +5,9 @@ name: CI/CD Pipeline
 on:
   #alterando main para master apenas para desativar temporariamente meu CI, finalizando configracao do projeto devo voltar para main!!!
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-test-release:
@@ -22,19 +22,19 @@ jobs:
         uses: actions/checkout@v3
       # o ambiente DOTNET ja deve estar instalado na maquina host que estara rodando os jobs!
       - name: Restore dependencies
-        run: dotnet restore MinimalAPIKickoff.sln
+        run: dotnet restore CreditScoringEngine.sln
 
       - name: Build solution
-        run: dotnet build MinimalAPIKickoff.sln --configuration Release --no-restore
+        run: dotnet build CreditScoringEngine.sln --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test MinimalAPIKickoff.sln --configuration Release --no-build --verbosity normal
+        run: dotnet test CreditScoringEngine.sln --configuration Release --no-build --verbosity normal
 
       - name: Publish package
-        run: dotnet publish MinimalAPIKickoff.API/MinimalAPIKickoff.API.csproj --configuration Release --output ./publish
+        run: dotnet publish CreditScoringEngine.API/CreditScoringEngine.API.csproj --configuration Release --output ./publish
 
       - name: Archive package
-        run: Compress-Archive -Path ./publish/* -DestinationPath ./MinimalAPIKickoff.zip
+        run: Compress-Archive -Path ./publish/* -DestinationPath ./CreditScoringEngine.zip
         shell: powershell  
 
       - name: Create Release Version Tag
@@ -50,7 +50,20 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           name: Release ${{ env.RELEASE_TAG }}
-          files: MinimalAPIKickoff.zip
+          files: CreditScoringEngine.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/desafio-tecnico-api:latest CreditScoringEngine.API/Docker
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/desafio-tecnico-api:latest
 
