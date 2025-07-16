@@ -132,6 +132,7 @@ if (!builder.Environment.IsEnvironment("Test"))
             shared: true
         )
         .CreateLogger();
+
 }
 
 // Aplica migrations
