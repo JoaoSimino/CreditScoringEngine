@@ -65,5 +65,5 @@ jobs:
         run: docker build -f ./CreditScoringEngine.API/Docker/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/creditscoringengine-api:latest .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/desafio-tecnico-api:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/creditscoringengine-api:latest 
 
