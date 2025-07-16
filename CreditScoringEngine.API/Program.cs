@@ -14,7 +14,6 @@ using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configura logger mínimo para permitir logs antes do banco existir
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .WriteTo.Console()
@@ -70,7 +69,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// --- CRIA BANCO SE NÃO EXISTIR ---
+// --- CRIA BANCO SE NAO EXISTIR ---
 if (!builder.Environment.IsEnvironment("Test"))
 {
     using (var scope = app.Services.CreateScope())
@@ -98,7 +97,7 @@ if (!builder.Environment.IsEnvironment("Test"))
         command.ExecuteNonQuery();
     }
 
-    // --- RECONFIGURA O SERILOG AGORA COM SINK NO BANCO, QUE JÁ ESTÁ CRIADO ---
+    // --- RECONFIGURA O SERILOG AGORA COM SINK NO BANCO, QUE JA ESTA CRIADO ---
     var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}";
     var sinkOptions = new MSSqlServerSinkOptions
     {
@@ -138,8 +137,11 @@ if (!builder.Environment.IsEnvironment("Test"))
 // Aplica migrations
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<CreditScoringEngineContext>();
-    dbContext.Database.Migrate();
+    if(!builder.Environment.IsEnvironment("Test"))
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<CreditScoringEngineContext>();
+        dbContext.Database.Migrate();
+    } 
 }
 
 app.UseHangfireDashboard();
